@@ -6,7 +6,7 @@
 //#include "I8080ISelLowering.h"
 //#include "I8080InstrInfo.h"
 //#include "I8080SelectionDAGInfo.h"
-#include "I8080Subtarget.h"
+#include "LC2200Subtarget.h"
 #include "llvm/Target/TargetMachine.h"
 
 #define GET_SUBTARGETINFO_HEADER

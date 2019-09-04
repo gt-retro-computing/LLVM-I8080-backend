@@ -2,7 +2,7 @@
 #include "I8080.h"
 #include "llvm/Support/TargetRegistry.h"
 
-#define DEBUG_TYPE "lc2200-subtarget"
+#define DEBUG_TYPE "i8080-subtarget"
 
 #define GET_SUBTARGETINFO_TARGET_DESC
 #define GET_SUBTARGETINFO_CTOR
