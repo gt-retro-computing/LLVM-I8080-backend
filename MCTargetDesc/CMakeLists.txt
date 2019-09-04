@@ -1,0 +1,9 @@
+add_llvm_library(LLVMI8080Desc
+        I8080AsmBackend.cpp
+        I8080ELFObjectWriter.cpp
+        I8080HexObjectWriter.cpp
+        I8080HexStreamer.cpp
+        I8080MCTargetDesc.cpp
+        I8080MCAsmInfo.cpp
+        I8080MCCodeEmitter.cpp
+        )

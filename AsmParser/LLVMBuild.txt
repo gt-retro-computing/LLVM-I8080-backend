@@ -1,0 +1,6 @@
+[component_0]
+type = Library
+name = I8080AsmParser
+parent = I8080
+required_libraries = MC MCParser Support I8080Desc I8080Info
+add_to_library_groups = I8080

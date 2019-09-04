@@ -1,0 +1,6 @@
+[component_0]
+type = Library
+name = I8080Info
+parent = I8080
+required_libraries = Support
+add_to_library_groups = I8080
