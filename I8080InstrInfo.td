@@ -13,98 +13,105 @@
 
 include "I8080InstrFormats.td"
 
-//==========================
-// R Type Instructions
-//==========================
+//===============================
+// ALU_r Instructions
+//===============================
 
-def ADD : RTypeInstr<0b0000, "add",
-    [(set i32:$dr, (add i32:$sr1, i32:$sr2))]> {
-    let isAdd = 1;
-}
-def NAND: RTypeInstr<0b0001, "nand",
-    [(set (i32 GRRegs:$dr), (xor (xor (i32 GRRegs:$sr1), (xor (i32 GRRegs:$sr1), (i32 GRRegs:$sr2))), (xor (i32 GRRegs:$sr2), (xor (i32 GRRegs:$sr1), (i32 GRRegs:$sr2)))))]>;
+def ADD_r : I8080ALU_rInst<"add", add>;
 
 
-//=========================
-// I Type Instruction
-//==========================
+// //==========================
+// // R Type Instructions
+// //==========================
 
-def ADDI : ITypeInstr<0b0010, (outs GRRegs:$dst), (ins GRRegs:$src1, I8080imm20:$imm),
-    "addi", "$dst, $src1, $imm",
-    [(set (i32 GRRegs:$dst), (add (i32 GRRegs:$src1), I8080imm20:$imm))]> {
-        bits<4> dst;
-        bits<4> src1;
-        bits<20> imm;
-        let Inst{27-24} = src1;
-        let Inst{23-20} = dst;
-        let Inst{19-0} = imm;
-    }
-
-def LW: ITypeInstr<0b0011, (outs GRRegs:$dst), (ins I8080imm20:$off20, GRRegs:$base),
-    "lw", "$dst, ${off20}(${base})",
-    [(set (i32 GRRegs:$dst), (load (add (i32 GRRegs:$base), I8080imm20:$off20)))]> {
-        bits<4> dst;
-        bits<4> base;
-        bits<20> off20;
-        let Inst{23-20} = dst;
-        let Inst{27-24} = base;
-        let Inst{19-0} = off20;
-    }
-
-def SW: ITypeInstr<0b0100, (outs GRRegs:$src1), (ins I8080imm20:$offset, GRRegs:$base),
-    "sw", "$src1, ${offset}(${base})",
-    [(store i32:$src1, (add (i32 GRRegs:$base), I8080imm20:$offset))]> {
-        bits<4> src1;
-        bits<4> base;
-        bits<20> offset;
-        let Inst{27-24} = base;
-        let Inst{23-20} = src1;
-        let Inst{19-0} = offset;
-    }
-
-def GOTO: ITypeInstr<0b0101, (outs), (ins I8080imm20:$offset),
-    "goto", "$offset",
-    [(brind I8080imm20:$offset)]> {
-        bits<20> offset;
-        let Inst{27-24} = 0;
-        let Inst{23-20} = 0;
-        let Inst{19-0} = offset;
-        let isBranch = 1;
-        let isTerminator = 1;
-    }
-
-def JALR: ITypeInstr<0b0101, (outs GRRegs:$dr), (ins GRRegs:$sr1),
-    "jalr", "$dr, $sr1",
-    []> {
-        bits<4> dr;
-        bits<4> sr1;
-        let Inst{27-24} = dr;
-        let Inst{23-20} = sr1;
-        let Inst{19-0} = 0;
-        let isBranch = 1;
-        let isTerminator = 1;
-    }
-
-def HALT : InstI8080<(outs), (ins), 0b0111, "halt", "", []> {
-    let Inst{27-0} = 0;
-    let isTerminator = 1;
-    let hasSideEffects = 1;
-}
-
-def SKPE : SKPTypeInstr<0b1000, 0b0000, "skpe", []>;
-def SKPLT : SKPTypeInstr<0b1000, 0b0001, "skplt", []>;
+// def ADD : RTypeInstr<0b0000, "add",
+//     [(set i32:$dr, (add i32:$sr1, i32:$sr2))]> {
+//     let isAdd = 1;
+// }
+// def NAND: RTypeInstr<0b0001, "nand",
+//     [(set (i32 GRRegs:$dr), (xor (xor (i32 GRRegs:$sr1), (xor (i32 GRRegs:$sr1), (i32 GRRegs:$sr2))), (xor (i32 GRRegs:$sr2), (xor (i32 GRRegs:$sr1), (i32 GRRegs:$sr2)))))]>;
 
 
-def LEA: ITypeInstr<0b1001, (outs GRRegs:$dr), (ins I8080imm20:$offset),
-    "lea", "$dr, $offset",
-    [(set i32:$dr, (add pc, I8080imm20:$offset))]> {
-        bits<4> dr;
-        bits<20> offset;
-        let Inst{27-24} = dr;
-        let Inst{23-20} = 0;
-        let Inst{19-0} = offset;
-        let isAdd = 1;
-    }
+// //=========================
+// // I Type Instruction
+// //==========================
+
+// def ADDI : ITypeInstr<0b0010, (outs GRRegs:$dst), (ins GRRegs:$src1, I8080imm20:$imm),
+//     "addi", "$dst, $src1, $imm",
+//     [(set (i32 GRRegs:$dst), (add (i32 GRRegs:$src1), I8080imm20:$imm))]> {
+//         bits<4> dst;
+//         bits<4> src1;
+//         bits<20> imm;
+//         let Inst{27-24} = src1;
+//         let Inst{23-20} = dst;
+//         let Inst{19-0} = imm;
+//     }
+
+// def LW: ITypeInstr<0b0011, (outs GRRegs:$dst), (ins I8080imm20:$off20, GRRegs:$base),
+//     "lw", "$dst, ${off20}(${base})",
+//     [(set (i32 GRRegs:$dst), (load (add (i32 GRRegs:$base), I8080imm20:$off20)))]> {
+//         bits<4> dst;
+//         bits<4> base;
+//         bits<20> off20;
+//         let Inst{23-20} = dst;
+//         let Inst{27-24} = base;
+//         let Inst{19-0} = off20;
+//     }
+
+// def SW: ITypeInstr<0b0100, (outs GRRegs:$src1), (ins I8080imm20:$offset, GRRegs:$base),
+//     "sw", "$src1, ${offset}(${base})",
+//     [(store i32:$src1, (add (i32 GRRegs:$base), I8080imm20:$offset))]> {
+//         bits<4> src1;
+//         bits<4> base;
+//         bits<20> offset;
+//         let Inst{27-24} = base;
+//         let Inst{23-20} = src1;
+//         let Inst{19-0} = offset;
+//     }
+
+// def GOTO: ITypeInstr<0b0101, (outs), (ins I8080imm20:$offset),
+//     "goto", "$offset",
+//     [(brind I8080imm20:$offset)]> {
+//         bits<20> offset;
+//         let Inst{27-24} = 0;
+//         let Inst{23-20} = 0;
+//         let Inst{19-0} = offset;
+//         let isBranch = 1;
+//         let isTerminator = 1;
+//     }
+
+// def JALR: ITypeInstr<0b0101, (outs GRRegs:$dr), (ins GRRegs:$sr1),
+//     "jalr", "$dr, $sr1",
+//     []> {
+//         bits<4> dr;
+//         bits<4> sr1;
+//         let Inst{27-24} = dr;
+//         let Inst{23-20} = sr1;
+//         let Inst{19-0} = 0;
+//         let isBranch = 1;
+//         let isTerminator = 1;
+//     }
+
+// def HALT : InstI8080<(outs), (ins), 0b0111, "halt", "", []> {
+//     let Inst{27-0} = 0;
+//     let isTerminator = 1;
+//     let hasSideEffects = 1;
+// }
+
+// def SKPE : SKPTypeInstr<0b1000, 0b0000, "skpe", []>;
+// def SKPLT : SKPTypeInstr<0b1000, 0b0001, "skplt", []>;
+
+
+// def LEA: ITypeInstr<0b1001, (outs GRRegs:$dr), (ins I8080imm20:$offset),
+//     "lea", "$dr, $offset",
+//     [(set i32:$dr, (add pc, I8080imm20:$offset))]> {
+//         bits<4> dr;
+//         bits<20> offset;
+//         let Inst{27-24} = dr;
+//         let Inst{23-20} = 0;
+//         let Inst{19-0} = offset;
+//         let isAdd = 1;
+//     }
 
 
 // def BEQ: ITypeInstr<0b0100, (outs SRCRegs:$src1), (ins SRCRegs:$src2, i32imm:$pcoffset),
