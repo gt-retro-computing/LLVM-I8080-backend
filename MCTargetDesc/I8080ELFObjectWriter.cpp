@@ -24,7 +24,7 @@ namespace {
     };
 }
 
-I8080ELFObjectWriter::I8080ELFObjectWriter(uint8_t OSABI) : MCELFObjectTargetWriter(false, OSABI, ELF::EM_I8080, false){}
+I8080ELFObjectWriter::I8080ELFObjectWriter(uint8_t OSABI) : MCELFObjectTargetWriter(false, OSABI, ELF::EM_IMSAI_8080, false){}
 
 I8080ELFObjectWriter::~I8080ELFObjectWriter() {}
 

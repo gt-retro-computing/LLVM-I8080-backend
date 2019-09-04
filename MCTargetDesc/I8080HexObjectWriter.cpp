@@ -12,7 +12,7 @@ class I8080HexObjectWriter : MCObjectTargetWriter {
 public:
     ~I8080HexObjectWriter(){}
     Triple::ObjectFormatType getFormat() const override {
-        return Triple::HEX;
+        return Triple::Hex;
     }
 };
 

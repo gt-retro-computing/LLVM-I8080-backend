@@ -73,8 +73,7 @@ static MCStreamer* createI8080ELFStreamer(const Triple &T, MCContext &Ctx,
 }
 
 static MCTargetStreamer* createI8080TargetStreamer(MCStreamer &S, const MCSubtargetInfo &STI) {
-    if (STI.getTargetTriple().getObjectFormat() == Triple::HEX) {
-
+    if (STI.getTargetTriple().getObjectFormat() == Triple::Hex) {
     }
 }
 
