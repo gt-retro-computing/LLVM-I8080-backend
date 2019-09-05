@@ -50,7 +50,7 @@ class I8080AsmParser : public MCTargetAsmParser {
 
 public:
   I8080AsmParser(const MCSubtargetInfo &_STI, MCAsmParser &_Parser,
-                  const MCInstrInfo &MII, const MCTargetOptions &Options)
+                 const MCInstrInfo &MII, const MCTargetOptions &Options)
           : MCTargetAsmParser(Options, _STI, MII), STI(_STI), Parser(_Parser) {
 //            setAvailableFeatures(ComputeAvailableFeatures(STI.getFeatureBits()));
     MCAsmParserExtension::Initialize(Parser);
@@ -138,7 +138,7 @@ public:
 
   bool isToken() const override { return Kind == k_Token; }
 
-  bool isMem() const override  { return false; }
+  bool isMem() const override { return false; }
 
   bool isImm20() const {
     if (Kind == k_Immediate && Imm.Val->getKind() == MCExpr::ExprKind::Constant) {
@@ -179,7 +179,7 @@ public:
         OS << "Reg<" << Reg.Num << ">";
         break;
       case k_Immediate:
-        OS << "Imm<" << ((const MCConstantExpr*)Imm.Val)->getValue() << ">";
+        OS << "Imm<" << ((const MCConstantExpr *) Imm.Val)->getValue() << ">";
         break;
       case k_Token:
         OS << Tok.Data;
@@ -197,7 +197,7 @@ public:
   }
 
   static std::unique_ptr<I8080Operand> createReg(unsigned RegNo,
-                                                  SMLoc S, SMLoc E) {
+                                                 SMLoc S, SMLoc E) {
     auto Op = std::make_unique<I8080Operand>(k_Register);
     Op->Reg.Num = RegNo;
     Op->StartLoc = S;
@@ -206,7 +206,7 @@ public:
   }
 
   static std::unique_ptr<I8080Operand> createImm(const MCExpr *Val,
-                                                  SMLoc S, SMLoc E) {
+                                                 SMLoc S, SMLoc E) {
     auto Op = std::make_unique<I8080Operand>(k_Immediate);
     Op->Imm.Val = Val;
     Op->StartLoc = S;
@@ -220,7 +220,7 @@ static unsigned MatchRegisterName(StringRef Name); // Body is generate by tableG
 
 bool
 I8080AsmParser::MatchAndEmitInstruction(SMLoc IDLoc, unsigned &Opcode, OperandVector &Operands, MCStreamer &Out,
-                                         uint64_t &ErrorInfo, bool MatchingInlineAsm) {
+                                        uint64_t &ErrorInfo, bool MatchingInlineAsm) {
   MCInst Inst;
 
   if (MatchInstructionImpl(Operands, Inst, ErrorInfo, MatchingInlineAsm)) {
@@ -238,24 +238,19 @@ bool I8080AsmParser::ParseRegister(unsigned &RegNo, OperandVector &Operands) {
   switch (getLexer().getKind()) {
     default:
       return true;
-    case AsmToken::Dollar:
-      const AsmToken &Next = getLexer().Lex();
-      if (Next.getKind() == AsmToken::Identifier) {
-        StringRef regName = StringRef("$" + Next.getIdentifier().str());
-        RegNo = MatchRegisterName(regName);
-        if (RegNo != 0) {
-          getLexer().Lex();
-          Operands.push_back(I8080Operand::createReg(RegNo, S, E));
-          return false;
-        }
+    case AsmToken::Identifier:
+      RegNo = MatchRegisterName(getLexer().getTok().getIdentifier());
+      if (RegNo != 0) {
+        getLexer().Lex();
+        Operands.push_back(I8080Operand::createReg(RegNo, S, E));
+        return false;
       }
-      getLexer().UnLex(Next);
       return true;
   }
 }
 
 bool I8080AsmParser::ParseRegister(unsigned &RegNo,
-                                    SMLoc &StartLoc, SMLoc &EndLoc) {
+                                   SMLoc &StartLoc, SMLoc &EndLoc) {
   SmallVector<std::unique_ptr<MCParsedAsmOperand>, 1> Operands;
   if (ParseRegister(RegNo, Operands))
     return true;
@@ -330,9 +325,9 @@ bool I8080AsmParser::ParseOperand(OperandVector &Operands) {
 
 
 bool I8080AsmParser::ParseInstruction(ParseInstructionInfo &Info,
-                                       StringRef Name,
-                                       SMLoc NameLoc,
-                                       OperandVector &Operands) {
+                                      StringRef Name,
+                                      SMLoc NameLoc,
+                                      OperandVector &Operands) {
   // First operand is token for instruction
   Operands.push_back(I8080Operand::CreateToken(Name, NameLoc));
 

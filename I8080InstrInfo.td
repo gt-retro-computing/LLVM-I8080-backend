@@ -15,9 +15,13 @@ include "I8080InstrFormats.td"
 
 //===============================
 // ALU_r Instructions
+// Format: 0b(xxxxx)(sss)
+// Where: x => Opcode
+//        s => Register ID
 //===============================
 
-def ADD_r : I8080ALU_rInst<"add", add>;
+// ADD (Reg): 0b10000SSS
+def ADD_r : I8080ALU_rInst<0b10000, "add", add>;
 
 
 // //==========================
