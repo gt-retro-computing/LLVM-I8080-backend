@@ -70,6 +70,7 @@ unsigned I8080MCCodeEmitter::getMachineOpValue(const MCInst &MI, const MCOperand
 void I8080MCCodeEmitter::encodeInstruction(const MCInst &Inst, raw_ostream &OS, SmallVectorImpl<MCFixup> &Fixups,
                                            const MCSubtargetInfo &STI) const {
   const MCInstrDesc &desc = InstrInfo.get(Inst.getOpcode());
+  uint32_t magicValue = desc.getNumOperands();
   uint32_t CurByte = 0;
   unsigned Value = getBinaryCodeForInstr(Inst, Fixups, STI);
   EmitBEConstant(Value, desc.Size, CurByte, OS);

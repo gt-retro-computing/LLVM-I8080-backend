@@ -19,8 +19,8 @@ class I8080Inst<dag outs, dag ins, string opcodestr, string argstr, list<dag> pa
   let Pattern = pattern;
 }
 
-class I8080ALU_rInst<bits<5> opcode, string opcodestr, SDNode opnode> : I8080Inst<(outs AccReg:$dst), (ins AccReg:$src1, GPReg:$src2), opcodestr, "$src2", 
-[(set (i8 AccReg:$dst), (opnode (i8 AccReg:$src1), (i8 GPReg:$src2)))]> {
+class I8080ALU_rInst<bits<5> opcode, string opcodestr, SDNode opnode> : I8080Inst<(outs AccReg:$a), (ins GPReg:$src2), opcodestr, "$src2", 
+[(set AccReg:$a, (opnode regA, GPReg:$src2))]> {
   let Size = 1;
   field bits<8> Inst;
   let Inst{7-3} = opcode;
